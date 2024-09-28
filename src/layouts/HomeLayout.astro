@@ -5,10 +5,14 @@ import srcImage from "../assets/programming.jpg";
 import ContactButton from "@/components/fragments/contact-button";
 
 const optimizedBackground = await getImage({ src: srcImage, format: "webp" });
-console.log(optimizedBackground);
 ---
 
-<section id="home" style={`background-image: url(${optimizedBackground.src}); background-size: cover; background-position: center; background-repeat: no-repeat;`} class="relative w-full min-h-[50.625rem] flex justify-center items-center">
+<section
+  id="home"
+  style={`background-image: url(${optimizedBackground.src}); background-size: cover; background-position: center; background-repeat: no-repeat;`}
+  class="relative w-full min-h-[50.625rem] flex justify-center items-center"
+  class="w-full"
+>
   <div class="absolute inset-0 bg-black opacity-50"></div>
 
   <section class="flex flex-col gap-y-[3.688rem] z-10">

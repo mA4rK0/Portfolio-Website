@@ -1,10 +1,14 @@
 ---
 import HomeLayout from "@/layouts/HomeLayout.astro";
 import Layout from "../layouts/Layout.astro";
+import PortfolioLayout from "@/layouts/PortfolioLayout.astro";
+import Navbar from "@/components/ui/Navbar.astro";
 ---
 
 <Layout title="Marko">
   <main>
+    <Navbar />
     <HomeLayout />
+    <PortfolioLayout />
   </main>
 </Layout>
