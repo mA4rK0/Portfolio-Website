@@ -10,6 +10,7 @@
     "astro": "astro"
   },
   "dependencies": {
+    "@astrojs/node": "^8.3.4",
     "@astrojs/react": "^3.6.2",
     "@astrojs/tailwind": "^5.1.1",
     "@radix-ui/react-slot": "^1.1.0",
@@ -19,6 +20,8 @@
     "class-variance-authority": "^0.7.0",
     "clsx": "^2.1.1",
     "embla-carousel-react": "^8.3.0",
+    "firebase": "^10.13.2",
+    "firebase-admin": "^12.5.0",
     "flowbite": "^2.5.1",
     "lucide-react": "^0.446.0",
     "react": "^18.3.1",

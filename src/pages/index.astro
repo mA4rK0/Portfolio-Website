@@ -1,8 +1,15 @@
 ---
+import { isAuthenticated } from "@/firebase/middleware/auth";
 import HomeLayout from "@/layouts/HomeLayout.astro";
 import Layout from "../layouts/Layout.astro";
 import PortfolioLayout from "@/layouts/PortfolioLayout.astro";
 import Navbar from "@/components/ui/Navbar.astro";
+
+const userIsAuthenticated = await isAuthenticated();
+
+if (!userIsAuthenticated) {
+  return Astro.redirect("/signin");
+}
 ---
 
 <Layout title="Marko">
