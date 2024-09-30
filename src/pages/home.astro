@@ -1,0 +1,21 @@
+---
+import Layout from "../layouts/Layout.astro";
+import HomeLayout from "@/layouts/HomeLayout.astro";
+import PortfolioLayout from "@/layouts/PortfolioLayout.astro";
+import Navbar from "@/components/ui/Navbar.astro";
+import { app } from "../firebase/server";
+import { getAuth } from "firebase-admin/auth";
+
+const auth = getAuth(app);
+const sessionCookie = Astro.cookies.get("__session").value;
+const decodedCookie = await auth.verifySessionCookie(sessionCookie);
+const user = await auth.getUser(decodedCookie.uid);
+---
+
+<Layout title="Marko">
+  <main>
+    <Navbar />
+    <HomeLayout />
+    <PortfolioLayout />
+  </main>
+</Layout>

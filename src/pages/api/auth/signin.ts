@@ -2,23 +2,26 @@ import type { APIRoute } from "astro";
 import { app } from "../../../firebase/server";
 import { getAuth } from "firebase-admin/auth";
 
-export const GET: APIRoute = async ({ request, cookies, redirect }) => {
+export const POST: APIRoute = async ({ request, cookies }) => {
   const auth = getAuth(app);
 
-  /* Get token from request headers */
   const idToken = request.headers.get("Authorization")?.split("Bearer ")[1];
   if (!idToken) {
-    return new Response("No token found", { status: 401 });
+    return new Response(JSON.stringify({ error: "No token found" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
-  /* Verify id token */
   try {
     await auth.verifyIdToken(idToken);
   } catch (error) {
-    return new Response("Invalid token", { status: 401 });
+    return new Response(JSON.stringify({ error: "Invalid token" }), {
+      status: 401,
+      headers: { "Content-Type": "application/json" },
+    });
   }
 
-  /* Create and set session cookie */
   const fiveDays = 60 * 60 * 24 * 5 * 1000;
   const sessionCookie = await auth.createSessionCookie(idToken, {
     expiresIn: fiveDays,
@@ -26,7 +29,15 @@ export const GET: APIRoute = async ({ request, cookies, redirect }) => {
 
   cookies.set("__session", sessionCookie, {
     path: "/",
+    httpOnly: true,
+    secure: true,
+    sameSite: "strict",
   });
 
-  return redirect("/dashboard");
+  return new Response(JSON.stringify({ success: true }), {
+    status: 200,
+    headers: {
+      "Content-Type": "application/json",
+    },
+  });
 };
