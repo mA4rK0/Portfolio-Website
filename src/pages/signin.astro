@@ -12,11 +12,13 @@ import Layout from "../layouts/Layout.astro";
     <input type="password" name="password" id="password" />
     <button type="submit">Login</button>
   </form>
+  <button id="google">Sign in with Google</button>
+  <button id="anonymous">Anonymous</button>
   <p id="error-message" style="color: red;"></p>
 </Layout>
 
 <script>
-  import { getAuth, inMemoryPersistence, signInWithEmailAndPassword } from "firebase/auth";
+  import { getAuth, inMemoryPersistence, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup, signInAnonymously } from "firebase/auth";
   import { app } from "../firebase/client";
 
   const auth = getAuth(app);
@@ -57,6 +59,56 @@ import Layout from "../layouts/Layout.astro";
     } catch (error) {
       console.error("Error signing in:", error);
       errorMessage.textContent = error.message || "An error occurred during sign in.";
+    }
+  });
+
+  const googleSignin = document.querySelector("#google") as HTMLButtonElement;
+  googleSignin.addEventListener("click", async () => {
+    try {
+      const provider = new GoogleAuthProvider();
+      const userCredential = await signInWithPopup(auth, provider);
+      const idToken = await userCredential.user.getIdToken();
+      const res = await fetch("/api/auth/signin", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+        },
+      });
+
+      if (res.ok) {
+        window.location.href = "/home";
+      } else {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "An error occurred during sign in.");
+      }
+    } catch (error) {
+      console.error("Error signing in:", error);
+      errorMessage.textContent = error.message || "An error occurred during sign in.";
+    }
+  });
+
+  const anonymousSignIn = document.querySelector("#anonymous") as HTMLButtonElement;
+  anonymousSignIn.addEventListener("click", async () => {
+    try {
+      const userCredential = await signInAnonymously(auth);
+      const user = userCredential.user;
+      const idToken = await user.getIdToken();
+      const res = await fetch("/api/auth/signin", {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${idToken}`,
+        },
+      });
+
+      if (res.ok) {
+        window.location.href = "/home";
+      } else {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "An error occurred during guest login.");
+      }
+    } catch (error) {
+      console.error("Error during guest login:", error);
+      errorMessage.textContent = error.message || "An error occurred during guest login.";
     }
   });
 </script>
