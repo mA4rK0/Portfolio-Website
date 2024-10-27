@@ -1,20 +1,36 @@
 ---
 import Layout from "../layouts/Layout.astro";
+import { getImage } from "astro:assets";
+import "@/styles/globals.css";
+import srcImage from "../assets/neon.jpg";
+
+const optimizedBackground = await getImage({ src: srcImage, format: "webp" });
 ---
 
 <Layout title="Sign in">
-  <h1>Sign in</h1>
-  <p>New here? <a href="/register">Create an account</a></p>
-  <form id="signin-form">
-    <label for="email">Email</label>
-    <input type="email" name="email" id="email" />
-    <label for="password">Password</label>
-    <input type="password" name="password" id="password" />
-    <button type="submit">Login</button>
-  </form>
-  <button id="google">Sign in with Google</button>
-  <button id="anonymous">Anonymous</button>
-  <p id="error-message" style="color: red;"></p>
+  <section class="text-white flex items-center justify-center h-screen">
+    <section id="signin" style={`background-image: url(${optimizedBackground.src}); background-size: cover; background-position: center; background-repeat: no-repeat;`} class="flex flex-col items-center w-full border border-white">
+      <p class="text-lg font-bold my-6"><span class="text-white">M</span><span class="text-secondary">rC</span></p>
+      <h1 class="text-xl font-medium">Sign in</h1>
+      <p>New here? <a href="/register">Create an account</a></p>
+      <form id="signin-form">
+        <section>
+          <label for="email">Email</label>
+          <input type="email" name="email" id="email" />
+        </section>
+        <section>
+          <label for="password">Password</label>
+          <input type="password" name="password" id="password" />
+        </section>
+        <section>
+          <button type="submit">Sign in</button>
+        </section>
+      </form>
+      <button id="google">Sign in with Google</button>
+      <button id="anonymous">Anonymous</button>
+      <p id="error-message" style="color: red;"></p>
+    </section>
+  </section>
 </Layout>
 
 <script>
